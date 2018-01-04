@@ -1,4 +1,8 @@
+#include <algorithm>
+#include <memory>
+
 #include "MessengerServer.hpp"
+
 
 MessengerServer::MessengerServer(size_t port)
     : serverEndPoint(ip::tcp::v4(), port),
@@ -21,13 +25,24 @@ void MessengerServer::run() {
             std::cout << socket.remote_endpoint()
                       << " > " << data << std::endl;
 
-            clients.push_back(std::move(socket));
+            clients.push_back(std::make_shared<ip::tcp::socket>(std::move(socket)));
 
             for(auto& client: clients) {
-                client.write_some(buffer(data));
-                std::cout << client.remote_endpoint()
-                          << " < " << data << std::endl;
+                try {
+                    client->write_some(buffer(data));
+                    std::cout << client->remote_endpoint()
+                              << " < " << data << std::endl;
+                }
+                catch(std::system_error &e) {
+                    std::cerr << "Error: " << e.what() << std::endl
+                              << "Code: " << e.code() << std::endl;
+                    if(error::not_connected == e.code()) {
+                        client.reset(); //delete connection and set pointer to null for furthering removing from vector
+                    }
+                }
             }
+
+            clients.erase(std::remove(clients.begin(), clients.end(), nullptr), clients.end()); //removing nullptrs
         }
     }
 }

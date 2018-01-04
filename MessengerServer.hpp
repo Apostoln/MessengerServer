@@ -11,7 +11,7 @@ using namespace asio;
 class MessengerServer {
     private:
         io_service ioService;
-        std::vector<ip::tcp::socket> clients;
+        std::vector<std::shared_ptr<ip::tcp::socket>> clients;
         ip::tcp::endpoint serverEndPoint;
         ip::tcp::acceptor acceptor;
         size_t port;
@@ -23,7 +23,6 @@ class MessengerServer {
         MessengerServer(size_t port);
 
         void run();
-
 };
 
 
