@@ -21,11 +21,16 @@ int main() {
         ip::tcp::socket socket(ioService);
         acceptor.accept(socket);
         size_t messageLength = socket.read_some(buffer(data));
-
         if (0 != messageLength) {
             std::cout << socket.remote_endpoint()
-                      << "< " << data << std::endl;
+                      << " > " << data << std::endl;
+
+            socket.write_some(buffer(data));
+            std::cout << socket.remote_endpoint()
+                      << " < " << data << std::endl;
         }
+
+
     }
 
 
