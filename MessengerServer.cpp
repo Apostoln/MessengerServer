@@ -2,7 +2,8 @@
 
 MessengerServer::MessengerServer(size_t port)
     : serverEndPoint(ip::tcp::v4(), port),
-      acceptor(ioService, serverEndPoint)
+      acceptor(ioService, serverEndPoint),
+      port(port)
 {
     std::cout << "Server is created" << std::endl;
 }
