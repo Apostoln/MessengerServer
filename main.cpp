@@ -1,5 +1,5 @@
 #include <iostream>
-#include <thread>
+#include <vector>
 
 #include <asio.hpp>
 
@@ -15,6 +15,7 @@ int main() {
     std::cout << "Server is started on " << serverEndPoint.address().to_string()
               << ":" << serverEndPoint.port() << std::endl;
 
+    std::vector<ip::tcp::socket> clients;
 
     char data[BUFFER_SIZE] = {0};
     while (true) {
@@ -25,9 +26,13 @@ int main() {
             std::cout << socket.remote_endpoint()
                       << " > " << data << std::endl;
 
-            socket.write_some(buffer(data));
-            std::cout << socket.remote_endpoint()
-                      << " < " << data << std::endl;
+            clients.push_back(std::move(socket));
+
+            for(auto& client: clients) {
+                client.write_some(buffer(data));
+                std::cout << client.remote_endpoint()
+                          << " < " << data << std::endl;
+            }
         }
 
 
