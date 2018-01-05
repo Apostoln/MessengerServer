@@ -3,10 +3,12 @@
 
 #include <iostream>
 #include <vector>
+#include <thread>
 
 #include <asio.hpp>
 
 #include "Client.hpp"
+
 
 using namespace asio;
 
@@ -17,7 +19,9 @@ class MessengerServer {
         ip::tcp::endpoint serverEndPoint;
         ip::tcp::acceptor acceptor;
         size_t port;
-        //asio::ip::address interface;
+        //asio::ip::address interface; //TODO
+        std::thread acceptorThread;
+        std::thread handlingThread;
 
 
 
@@ -25,6 +29,10 @@ class MessengerServer {
         MessengerServer(size_t port);
 
         void run();
+
+        void acceptClients();
+        void handleClients();
+
 };
 
 

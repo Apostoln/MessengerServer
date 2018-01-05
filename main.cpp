@@ -1,5 +1,4 @@
 #include "MessengerServer.hpp"
-
 using namespace asio;
 
 constexpr static unsigned short PORT = 1234;
