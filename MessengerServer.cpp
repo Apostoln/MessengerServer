@@ -24,7 +24,6 @@ void MessengerServer::run() {
 }
 
 void MessengerServer::acceptClients() {
-    std::cout << "acceptClients" << std::endl;
     while(true) {
         ip::tcp::socket socket(ioService);
         acceptor.accept(socket);
@@ -35,10 +34,11 @@ void MessengerServer::acceptClients() {
         if (0 != messageLength) {
             std::cout << client.socket->remote_endpoint()
                       << " >> " << client.buffer << std::endl;
-            if ( ProtocolMessage::START == client.buffer) {
+            if (ProtocolMessage::START == client.buffer) {
                 std::cout << client.socket->remote_endpoint()  << " << " << "#OK" << std::endl;
                 client.socket->write_some(buffer("#OK"));
 
+                std::lock_guard<std::mutex> clientsLock(clientsMutex);
                 std::cout << "Client added to vector" << std::endl;
                 clients.push_back(client);
             }
@@ -53,12 +53,18 @@ void MessengerServer::acceptClients() {
 
 
 void MessengerServer::handleClients() {
-    std::cout << "handleClients" << std::endl;
     while(true) {
+        std::lock_guard<std::mutex> clientsLock(clientsMutex);
         for(auto& client: clients) {
-            size_t messageLength = client.socket->read_some(buffer(client.buffer));
+            size_t messageLength = client.socket->available() ?
+                                   client.socket->read_some(buffer(client.buffer)) :
+                                   0;
+
             if (0 != messageLength) {
+
                 auto message = client.buffer;
+                std::cout << client.socket->remote_endpoint()
+                          << " > " << message << std::endl;
 
                 for(auto& outClient: clients) {
                     try {
@@ -77,11 +83,14 @@ void MessengerServer::handleClients() {
             }
         }
 
+
         clients.erase(std::remove_if(clients.begin(),
                                      clients.end(),
                                      [](auto client){
                                          return nullptr == client.socket;
                                      }),
                       clients.end()); //removing nullptrs
+
     }
+
 }

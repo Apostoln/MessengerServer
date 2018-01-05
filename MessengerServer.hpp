@@ -4,8 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <mutex>
 
 #include <asio.hpp>
+
 
 #include "Client.hpp"
 
@@ -20,8 +22,10 @@ class MessengerServer {
         ip::tcp::acceptor acceptor;
         size_t port;
         //asio::ip::address interface; //TODO
+
         std::thread acceptorThread;
         std::thread handlingThread;
+        std::mutex clientsMutex;
 
 
 
