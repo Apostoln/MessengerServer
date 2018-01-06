@@ -56,6 +56,9 @@ void MessengerServer::handleClients() {
     while(true) {
         std::lock_guard<std::mutex> clientsLock(clientsMutex);
         for(auto& client: clients) {
+            if (nullptr == client.socket) {
+                continue;
+            }
             size_t messageLength = client.socket->available() ?
                                    client.socket->read_some(buffer(client.buffer)) :
                                    0;
@@ -113,7 +116,15 @@ void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
 }
 
 void MessengerServer::closeClient(Client& client) {
-    std::cout << "Close client " << client.socket->remote_endpoint() << std::endl;
+    try { //TODO: cout for id
+        std::cout << "Close client " << client.socket->remote_endpoint() << std::endl;
+
+    }
+    catch (std::system_error &e){
+        if (error::not_connected != e.code()) {
+            throw; //else ignore
+        }
+    }
     client.socket.reset(); //delete connection and set pointer to null for furthering removing from vector
 }
 
