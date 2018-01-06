@@ -43,8 +43,6 @@ class MessengerServer {
 
         void closeClient(Client&);
         void removeClosedClients();
-
-        void write(Client&, const std::string&);
 };
 
 

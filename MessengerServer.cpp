@@ -32,11 +32,10 @@ void MessengerServer::acceptClients() {
 
         size_t messageLength = client.socket->read_some(buffer(client.buffer));
         if (0 != messageLength) {
-            std::cout << client.socket->remote_endpoint()
+            std::cout << client.endPoint
                       << " >> " << client.buffer << std::endl;
             if (ProtocolMessage::START == client.buffer) {
-                std::cout << client.socket->remote_endpoint()  << " << " << "#OK" << std::endl;
-                client.socket->write_some(buffer("#OK"));
+                client.write(ProtocolMessage::OK);
 
                 std::lock_guard<std::mutex> clientsLock(clientsMutex);
                 std::cout << "Client added to vector" << std::endl;
@@ -65,7 +64,7 @@ void MessengerServer::handleClients() {
 
             if (0 != messageLength) {
                 const char* message = client.buffer;
-                std::cout << client.socket->remote_endpoint()
+                std::cout << client.endPoint
                           << " > " << message << std::endl;
 
                 if (isProtocolMessage(message)) {
@@ -74,9 +73,7 @@ void MessengerServer::handleClients() {
                 else {
                     for (auto &outClient: clients) {
                         try {
-                            outClient.socket->write_some(buffer(message, strlen(message)));
-                            std::cout << outClient.socket->remote_endpoint()
-                                      << " < " << message << std::endl;
+                            outClient.write(message);
                         }
                         catch (std::system_error &e) {
                             std::cerr << "Error: " << e.what() << std::endl
@@ -105,7 +102,7 @@ bool MessengerServer::isProtocolMessage(const char* msg) {
 void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
     switch(msg) {
         case ProtocolMessage::CANCEL: {
-            write(client, protocolString[ProtocolMessage::OK]);
+            client.write(ProtocolMessage::OK);
             closeClient(client);
             break;
         }
@@ -117,7 +114,7 @@ void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
 
 void MessengerServer::closeClient(Client& client) {
     try { //TODO: cout for id
-        std::cout << "Close client " << client.socket->remote_endpoint() << std::endl;
+        std::cout << "Close client " << client.endPoint << std::endl;
 
     }
     catch (std::system_error &e){
@@ -135,10 +132,4 @@ void MessengerServer::removeClosedClients() {
                                      return nullptr == client.socket;
                                  }),
                   clients.end()); //removing nullptrs
-}
-
-void MessengerServer::write(Client& client, const std::string& message) {
-    client.socket->write_some(buffer(message));
-    std::cout << client.socket->remote_endpoint()
-              << " < " << message << std::endl;
 }
