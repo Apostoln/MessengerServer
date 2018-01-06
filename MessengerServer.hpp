@@ -39,10 +39,12 @@ class MessengerServer {
         void handleClients();
 
         bool isProtocolMessage(const char*);
-        void handleProtocol(ProtocolMessage);
+        void handleProtocol(Client&, ProtocolMessage);
 
         void closeClient(Client&);
         void removeClosedClients();
+
+        void write(Client&, const std::string&);
 };
 
 

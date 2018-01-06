@@ -66,20 +66,22 @@ void MessengerServer::handleClients() {
                           << " > " << message << std::endl;
 
                 if (isProtocolMessage(message)) {
-                    handleProtocol(fromString(message));
+                    handleProtocol(client, fromString(message));
                 }
-
-                for(auto& outClient: clients) {
-                    try {
-                        outClient.socket->write_some(buffer(message, strlen(message)));
-                        std::cout << outClient.socket->remote_endpoint()
-                                  << " < " << message << std::endl;
-                    }
-                    catch(std::system_error &e) {
-                        std::cerr << "Error: " << e.what() << std::endl
-                                  << "Code: " << e.code() << std::endl;
-                        if(error::not_connected == e.code()) {
-                            closeClient(outClient); //delete connection and set pointer to null for furthering removing from vector
+                else {
+                    for (auto &outClient: clients) {
+                        try {
+                            outClient.socket->write_some(buffer(message, strlen(message)));
+                            std::cout << outClient.socket->remote_endpoint()
+                                      << " < " << message << std::endl;
+                        }
+                        catch (std::system_error &e) {
+                            std::cerr << "Error: " << e.what() << std::endl
+                                      << "Code: " << e.code() << std::endl;
+                            if (error::not_connected == e.code()) {
+                                closeClient(outClient);
+                                //delete connection and set pointer to null for furthering removing from vector
+                            }
                         }
                     }
                 }
@@ -97,9 +99,11 @@ bool MessengerServer::isProtocolMessage(const char* msg) {
     return false;
 }
 
-void MessengerServer::handleProtocol(ProtocolMessage msg) {
+void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
     switch(msg) {
         case ProtocolMessage::CANCEL: {
+            write(client, protocolString[ProtocolMessage::OK]);
+            closeClient(client);
             break;
         }
         default: {
@@ -109,6 +113,7 @@ void MessengerServer::handleProtocol(ProtocolMessage msg) {
 }
 
 void MessengerServer::closeClient(Client& client) {
+    std::cout << "Close client " << client.socket->remote_endpoint() << std::endl;
     client.socket.reset(); //delete connection and set pointer to null for furthering removing from vector
 }
 
@@ -119,4 +124,10 @@ void MessengerServer::removeClosedClients() {
                                      return nullptr == client.socket;
                                  }),
                   clients.end()); //removing nullptrs
+}
+
+void MessengerServer::write(Client& client, const std::string& message) {
+    client.socket->write_some(buffer(message));
+    std::cout << client.socket->remote_endpoint()
+              << " < " << message << std::endl;
 }
