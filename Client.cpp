@@ -21,3 +21,8 @@ void Client::write(ProtocolMessage command) {
     std::cout << endPoint
               << " << " << message << std::endl;
 }
+
+void Client::close() {
+    std::cout << "Close client " << endPoint << std::endl;
+    socket.reset(); //delete connection and set pointer to null for furthering removing from vector
+}

@@ -47,7 +47,6 @@ void MessengerServer::acceptClients() {
             }
         }
     }
-
 }
 
 
@@ -79,7 +78,7 @@ void MessengerServer::handleClients() {
                             std::cerr << "Error: " << e.what() << std::endl
                                       << "Code: " << e.code() << std::endl;
                             if (error::not_connected == e.code()) {
-                                closeClient(outClient);
+                                outClient.close();
                                 //delete connection and set pointer to null for furthering removing from vector
                             }
                         }
@@ -103,26 +102,13 @@ void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
     switch(msg) {
         case ProtocolMessage::CANCEL: {
             client.write(ProtocolMessage::OK);
-            closeClient(client);
+            client.close();
             break;
         }
         default: {
             break;
         }
     }
-}
-
-void MessengerServer::closeClient(Client& client) {
-    try { //TODO: cout for id
-        std::cout << "Close client " << client.endPoint << std::endl;
-
-    }
-    catch (std::system_error &e){
-        if (error::not_connected != e.code()) {
-            throw; //else ignore
-        }
-    }
-    client.socket.reset(); //delete connection and set pointer to null for furthering removing from vector
 }
 
 void MessengerServer::removeClosedClients() {

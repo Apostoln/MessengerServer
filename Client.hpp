@@ -22,9 +22,7 @@ struct Client {
 
         void write(ProtocolMessage command);
 
-
-
-
+        void close();
 };
 
 
