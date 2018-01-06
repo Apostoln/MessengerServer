@@ -8,11 +8,12 @@
 
 #include <asio.hpp>
 
-
 #include "Client.hpp"
 
 
 using namespace asio;
+
+enum class ProtocolMessage;
 
 class MessengerServer {
     private:
@@ -37,6 +38,8 @@ class MessengerServer {
         void acceptClients();
         void handleClients();
 
+        bool isProtocolMessage(const char*);
+        void handleProtocol(ProtocolMessage);
 };
 
 

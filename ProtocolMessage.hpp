@@ -4,10 +4,12 @@
 #include <string>
 #include <unordered_map>
 
-enum  ProtocolMessage {
+enum class ProtocolMessage {
     START,
     OK,
-    ERROR
+    ERROR,
+    CANCEL,
+    UNKNOWN
 };
 
 namespace std {
@@ -22,7 +24,9 @@ namespace std {
 std::unordered_map<ProtocolMessage, std::string> protocolString  {
         {ProtocolMessage::START, "#START"},
         {ProtocolMessage::OK, "#OK"},
-        {ProtocolMessage::ERROR, "#ERROR"}
+        {ProtocolMessage::ERROR, "#ERROR"},
+        {ProtocolMessage::CANCEL, "#CANCEL"},
+        {ProtocolMessage::UNKNOWN, "UNKNOWN COMMAND"}
 };
 
 
@@ -38,6 +42,16 @@ bool operator==(const std::string& str, ProtocolMessage msg) {
         return true;
     }
     return false;
+}
+
+
+
+ProtocolMessage fromString(const std::string& msg) {
+    for(auto& pair : protocolString) {
+        if ( msg == pair.second) {
+            return pair.first;
+        }
+    }
 }
 
 #endif //MESSENGERSERVER_PROTOCOLMESSAGE_HPP

@@ -61,10 +61,13 @@ void MessengerServer::handleClients() {
                                    0;
 
             if (0 != messageLength) {
-
-                auto message = client.buffer;
+                const char* message = client.buffer;
                 std::cout << client.socket->remote_endpoint()
                           << " > " << message << std::endl;
+
+                if (isProtocolMessage(message)) {
+                    handleProtocol(fromString(message));
+                }
 
                 for(auto& outClient: clients) {
                     try {
@@ -92,5 +95,22 @@ void MessengerServer::handleClients() {
                       clients.end()); //removing nullptrs
 
     }
+}
 
+bool MessengerServer::isProtocolMessage(const char* msg) {
+    if ( '#' == msg[0]) {
+        return true;
+    }
+    return false;
+}
+
+void MessengerServer::handleProtocol(ProtocolMessage msg) {
+    switch(msg) {
+        case ProtocolMessage::CANCEL: {
+            break;
+        }
+        default: {
+            break;
+        }
+    }
 }
