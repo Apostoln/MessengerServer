@@ -38,7 +38,7 @@ class MessengerServer {
         void acceptClients();
         void handleClients();
 
-        bool isProtocolMessage(const char*);
+        static bool isProtocolMessage(const char*);
         void handleProtocol(Client&, ProtocolMessage);
 
         void closeClient(Client&);

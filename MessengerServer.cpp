@@ -30,20 +30,19 @@ void MessengerServer::acceptClients() {
 
         Client client(std::move(socket));
 
-        size_t messageLength = client.socket->read_some(buffer(client.buffer));
-        if (0 != messageLength) {
-            std::cout << client.endPoint
-                      << " >> " << client.buffer << std::endl;
-            if (ProtocolMessage::START == client.buffer) {
-                client.write(ProtocolMessage::OK);
+        while(true) {
+            if (client.read()) {
+                if (ProtocolMessage::START == client.buffer) {
+                    client.write(ProtocolMessage::OK);
 
-                std::lock_guard<std::mutex> clientsLock(clientsMutex);
-                std::cout << "Client added to vector" << std::endl;
-                clients.push_back(client);
-            }
-            else {
-                std::cerr << "Request is not #OK" << std::endl;
-                socket.shutdown(ip::tcp::socket::shutdown_send);
+                    std::lock_guard<std::mutex> clientsLock(clientsMutex);
+                    std::cout << "Client added to vector" << std::endl;
+                    clients.push_back(client);
+                } else {
+                    std::cerr << "Request is not #OK" << std::endl;
+                    socket.shutdown(ip::tcp::socket::shutdown_send);
+                }
+                break;
             }
         }
     }
@@ -57,14 +56,9 @@ void MessengerServer::handleClients() {
             if (nullptr == client.socket) {
                 continue;
             }
-            size_t messageLength = client.socket->available() ?
-                                   client.socket->read_some(buffer(client.buffer)) :
-                                   0;
 
-            if (0 != messageLength) {
+            if (client.read()) {
                 const char* message = client.buffer;
-                std::cout << client.endPoint
-                          << " > " << message << std::endl;
 
                 if (isProtocolMessage(message)) {
                     handleProtocol(client, fromString(message));
@@ -91,7 +85,7 @@ void MessengerServer::handleClients() {
     }
 }
 
-bool MessengerServer::isProtocolMessage(const char* msg) {
+ bool MessengerServer::isProtocolMessage(const char* msg) {
     if ( '#' == msg[0]) {
         return true;
     }

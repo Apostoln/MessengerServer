@@ -1,4 +1,5 @@
 #include "Client.hpp"
+#include "MessengerServer.hpp"
 
 Client::Client(ip::tcp::socket&& socket_)
     : socket(std::make_shared<ip::tcp::socket>(std::move(socket_))),
@@ -25,4 +26,21 @@ void Client::write(ProtocolMessage command) {
 void Client::close() {
     std::cout << "Close client " << endPoint << std::endl;
     socket.reset(); //delete connection and set pointer to null for furthering removing from vector
+}
+
+bool Client::read() {
+    auto delimiter = " < ";
+    size_t messageLength = socket->available() ?
+                           socket->read_some(asio::buffer(buffer)) :
+                           0;
+
+    if (0 != messageLength) {
+        if (MessengerServer::isProtocolMessage(buffer)) {
+            delimiter = " >> ";
+        }
+        std::cout << endPoint
+                  << delimiter << buffer << std::endl;
+        return true;
+    }
+    return false;
 }
