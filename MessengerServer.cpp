@@ -5,12 +5,15 @@
 #include "MessengerServer.hpp"
 #include "ProtocolMessage.hpp"
 
+
 MessengerServer::MessengerServer(size_t port)
     : serverEndPoint(ip::tcp::v4(), port),
       acceptor(ioService, serverEndPoint),
-      port(port)
+      port(port),
+      registrar("/home/portaone/Workspace/proj/CLion/Messenger/MessengerServer/etc/accounts.txt")
 {
     std::cout << "Server is created" << std::endl;
+
 }
 
 void MessengerServer::run() {

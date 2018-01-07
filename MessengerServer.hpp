@@ -9,7 +9,7 @@
 #include <asio.hpp>
 
 #include "Client.hpp"
-
+#include "Registrar.hpp"
 
 using namespace asio;
 
@@ -27,6 +27,8 @@ class MessengerServer {
         std::thread acceptorThread;
         std::thread handlingThread;
         std::mutex clientsMutex;
+
+        Registrar registrar;
 
 
 

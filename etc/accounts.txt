@@ -1,0 +1,2 @@
+testlog testpass
+testlog2 testpass2
