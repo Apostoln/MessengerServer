@@ -74,6 +74,9 @@ void MessengerServer::handleClients() {
                         if (!outClient.auth) {
                             continue; //pass unauth clients
                         }
+                        if (outClient.socket == client.socket) {
+                            continue; //don't send to sender
+                        }
                         try {
                             outClient.write(wrapMessage(client, message));
                         }
