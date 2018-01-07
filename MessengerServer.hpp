@@ -46,7 +46,8 @@ class MessengerServer {
 
         void unathorized(Client&);
 
-        std::string wrapMessage(Client client, const std::string&);
+        static std::string wrapMessage(Client client, const std::string&);
+
 };
 
 
