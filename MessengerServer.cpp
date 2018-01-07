@@ -102,6 +102,26 @@ void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
             client.close();
             break;
         }
+        case ProtocolMessage::REG: {
+            client.write(ProtocolMessage::OK);
+            while(true) {
+                if(client.read()) {
+                    std::string message(client.buffer);
+                    std::stringstream stream(message);
+                    std::string temp;
+                    std::getline(stream, temp, ' '); //split str for whitespace
+                    std::string login = temp;
+                    std::getline(stream, temp, ' ');
+                    std::string password = temp;
+
+                    std::cout << "addAccount login password" << std::endl;
+                    registrar.addAccount(Account{login, password});
+                    break;
+                }
+            }
+            client.write(ProtocolMessage::OK);
+
+        }
         default: {
             break;
         }
@@ -115,4 +135,9 @@ void MessengerServer::removeClosedClients() {
                                      return nullptr == client.socket;
                                  }),
                   clients.end()); //removing nullptrs
+}
+
+void MessengerServer::registerClient(Client &client) {
+
+
 }

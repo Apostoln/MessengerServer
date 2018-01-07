@@ -45,6 +45,8 @@ class MessengerServer {
 
         void closeClient(Client&);
         void removeClosedClients();
+
+        void registerClient(Client&);
 };
 
 

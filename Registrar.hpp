@@ -18,6 +18,8 @@ class Registrar {
         void download();
         void upload();
 
+        void addAccount(Account);
+
 
 };
 

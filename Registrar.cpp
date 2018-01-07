@@ -64,3 +64,7 @@ void Registrar::upload() {
         fout << accountString << std::endl;
     }
 }
+
+void Registrar::addAccount(Account acc) {
+    accounts.push_back(acc);
+}

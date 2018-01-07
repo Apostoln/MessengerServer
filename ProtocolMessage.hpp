@@ -9,6 +9,7 @@ enum class ProtocolMessage {
     OK,
     ERROR,
     CANCEL,
+    REG,
     UNKNOWN
 };
 
@@ -26,6 +27,7 @@ static std::unordered_map<ProtocolMessage, std::string> protocolString  {
         {ProtocolMessage::OK, "#OK"},
         {ProtocolMessage::ERROR, "#ERROR"},
         {ProtocolMessage::CANCEL, "#CANCEL"},
+        {ProtocolMessage::REG, "#REG"},
         {ProtocolMessage::UNKNOWN, "UNKNOWN COMMAND"}
 };
 
