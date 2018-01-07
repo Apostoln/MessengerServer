@@ -1,6 +1,8 @@
 #include <iostream>
 #include <algorithm>
 #include <memory>
+#include <iomanip>
+#include <sstream>
 
 #include "MessengerServer.hpp"
 #include "ProtocolMessage.hpp"
@@ -183,5 +185,11 @@ void MessengerServer::unathorized(Client& client) {
 }
 
 std::string MessengerServer::wrapMessage(Client client, const std::string &message) {
-    return "[" + client.account->login + "] " + message;
+    std::time_t t = std::time(nullptr);
+    std::tm* tt = std::localtime(&t);
+    std::stringstream buffer;
+    buffer << std::put_time(tt, "%d.%m.%y %T");
+    auto timeStamp = buffer.str();
+
+    return timeStamp + " [" + client.account->login + "] " + message;
 }
