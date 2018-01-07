@@ -84,6 +84,7 @@ Registrar::authAccount(Account acc) {
         accountPtr.reset(&(*foundAccount));
     }
 
-    return std::make_pair<bool, std::shared_ptr<Account>>(isAuth, std::accountPtr);
+    return std::make_pair<bool, std::shared_ptr<Account>>(std::move(isAuth),
+                                                          std::move(accountPtr));
 
 }
