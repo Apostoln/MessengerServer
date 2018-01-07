@@ -144,10 +144,12 @@ void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
                     Account candidate{login, password};
 
                     auto result = registrar.authAccount(candidate);
+
                     if (result.first) { // if successfull
                         isAuth = true;
-                        client.setAccount(result.second.get());
+                        client.setAccount(result.second);
                     }
+
                     break;
                 }
             }

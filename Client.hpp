@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <memory>
+#include <mutex>
 
 #include <asio.hpp>
 #include "ProtocolMessage.hpp"
@@ -21,6 +22,7 @@ struct Client {
         Account* account = nullptr;
 
         Client(ip::tcp::socket&& socket_);
+
 
         void write(const std::string& message);
 

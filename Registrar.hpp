@@ -19,7 +19,7 @@ class Registrar {
         void upload();
 
         void addAccount(Account);
-        std::pair<bool, std::shared_ptr<Account>> authAccount(Account);
+        std::pair<bool, Account*> authAccount(Account);
 
 
 };
