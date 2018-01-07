@@ -113,13 +113,41 @@ void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
                     std::getline(stream, temp, ' ');
                     std::string password = temp;
 
-                    std::cout << "addAccount login password" << std::endl;
                     registrar.addAccount(Account{login, password});
                     break;
                 }
             }
             client.write(ProtocolMessage::OK);
+            break;
+        }
+        case ProtocolMessage::LOGIN: {
+            client.write(ProtocolMessage::OK);
+            bool isAuth = false;
+            while(true) {
+                if(client.read()) {
+                    std::string message(client.buffer);
+                    std::stringstream stream(message);
+                    std::string temp;
+                    std::getline(stream, temp, ' '); //split str for whitespace
+                    std::string login = temp;
+                    std::getline(stream, temp, ' ');
+                    std::string password = temp;
 
+                    Account candidate{login, password};
+                    auto result = registrar.authAccount(candidate);
+                    if (result.first) {
+                        isAuth = true;
+                        client.setAccount(result.second.get());
+                    }
+                    break;
+                }
+            }
+            if (isAuth) {
+                client.write(ProtocolMessage::OK);
+            }
+            else {
+                client.write(ProtocolMessage::ERROR);
+            }
         }
         default: {
             break;

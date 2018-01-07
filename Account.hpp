@@ -6,6 +6,7 @@
 struct Account {
     std::string login;
     std::string password;
+    bool isOnline = false;
 };
 
 

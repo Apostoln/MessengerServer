@@ -45,3 +45,9 @@ bool Client::read() {
     }
     return false;
 }
+
+void Client::setAccount(Account* acc) {
+    auth = true;
+    account = acc;
+    acc->isOnline = true;
+}

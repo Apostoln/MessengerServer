@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iterator>
 #include <sstream>
+#include <algorithm>
+#include <memory>
 
 #include "Registrar.hpp"
 
@@ -67,4 +69,21 @@ void Registrar::upload() {
 
 void Registrar::addAccount(Account acc) {
     accounts.push_back(acc);
+}
+
+std::pair<bool, std::shared_ptr<Account>>
+Registrar::authAccount(Account acc) {
+    auto foundAccount = std::find_if(accounts.begin(), accounts.end(), [&](Account el){
+        return el.login == acc.login;
+    });
+    bool isAuth  = foundAccount != accounts.end() &&
+                   foundAccount->isOnline == false &&
+                   foundAccount->password == acc.password;
+    std::shared_ptr<Account> accountPtr = nullptr;
+    if (isAuth){
+        accountPtr.reset(&(*foundAccount));
+    }
+
+    return std::make_pair<bool, std::shared_ptr<Account>>(isAuth, std::accountPtr);
+
 }

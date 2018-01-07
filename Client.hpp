@@ -6,6 +6,7 @@
 
 #include <asio.hpp>
 #include "ProtocolMessage.hpp"
+#include "Account.hpp"
 
 using namespace asio;
 
@@ -16,6 +17,9 @@ struct Client {
         std::shared_ptr<ip::tcp::socket> socket;
         ip::tcp::endpoint endPoint;
 
+        bool auth = false;
+        Account* account = nullptr;
+
         Client(ip::tcp::socket&& socket_);
 
         void write(const std::string& message);
@@ -25,6 +29,8 @@ struct Client {
         void close();
 
         bool read();
+
+        void setAccount(Account* acc);
 };
 
 
