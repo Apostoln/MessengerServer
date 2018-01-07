@@ -45,6 +45,8 @@ class MessengerServer {
         void removeClosedClients();
 
         void unathorized(Client&);
+
+        std::string wrapMessage(Client client, const std::string&);
 };
 
 

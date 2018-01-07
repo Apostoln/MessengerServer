@@ -75,7 +75,7 @@ void MessengerServer::handleClients() {
                             continue; //pass unauth clients
                         }
                         try {
-                            outClient.write(message);
+                            outClient.write(wrapMessage(client, message));
                         }
                         catch (std::system_error &e) {
                             std::cerr << "Error: " << e.what() << std::endl
@@ -177,4 +177,8 @@ void MessengerServer::removeClosedClients() {
 
 void MessengerServer::unathorized(Client& client) {
     client.write(ProtocolMessage::UNAUTH);
+}
+
+std::string MessengerServer::wrapMessage(Client client, const std::string &message) {
+    return "[" + client.account->login + "] " + message;
 }
