@@ -66,7 +66,14 @@ void MessengerServer::handleClients() {
                     handleProtocol(client, fromString(message));
                 }
                 else {
+                    if (!client.auth) {
+                        unathorized(client);
+                        break;
+                    }
                     for (auto &outClient: clients) {
+                        if (!outClient.auth) {
+                            continue; //pass unauth clients
+                        }
                         try {
                             outClient.write(message);
                         }
@@ -82,6 +89,7 @@ void MessengerServer::handleClients() {
                 }
             }
         }
+
 
         removeClosedClients();
     }
@@ -135,10 +143,10 @@ void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
 
                     Account candidate{login, password};
 
-                    auto result = registrar.authAccount(candidate); //
+                    auto result = registrar.authAccount(candidate);
                     if (result.first) { // if successfull
                         isAuth = true;
-                        client.setAccount(result.second.get()); //
+                        client.setAccount(result.second.get());
                     }
                     break;
                 }
@@ -165,3 +173,6 @@ void MessengerServer::removeClosedClients() {
                   clients.end()); //removing nullptrs
 }
 
+void MessengerServer::unathorized(Client& client) {
+    client.write(ProtocolMessage::UNAUTH);
+}

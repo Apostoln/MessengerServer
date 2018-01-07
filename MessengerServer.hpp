@@ -44,6 +44,7 @@ class MessengerServer {
         void handleProtocol(Client&, ProtocolMessage);
         void removeClosedClients();
 
+        void unathorized(Client&);
 };
 
 
