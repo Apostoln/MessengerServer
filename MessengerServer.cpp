@@ -165,7 +165,3 @@ void MessengerServer::removeClosedClients() {
                   clients.end()); //removing nullptrs
 }
 
-void MessengerServer::registerClient(Client &client) {
-
-
-}

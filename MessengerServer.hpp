@@ -42,11 +42,8 @@ class MessengerServer {
 
         static bool isProtocolMessage(const char*);
         void handleProtocol(Client&, ProtocolMessage);
-
-        void closeClient(Client&);
         void removeClosedClients();
 
-        void registerClient(Client&);
 };
 
 
