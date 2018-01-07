@@ -59,7 +59,6 @@ void MessengerServer::handleClients() {
             if (nullptr == client.socket) {
                 continue;
             }
-
             if (client.read()) {
                 const char* message = client.buffer;
 

@@ -29,6 +29,7 @@ void Client::close() {
 }
 
 bool Client::read() {
+    memset(&buffer[0], 0, sizeof(buffer));
     auto delimiter = " < ";
     size_t messageLength = socket->available() ?
                            socket->read_some(asio::buffer(buffer)) :
