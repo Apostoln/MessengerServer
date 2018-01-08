@@ -114,3 +114,15 @@ DEBUG 02:53:35: testlog testpass
 DEBUG 02:53:35: testlog2 testpass2
 DEBUG 02:53:35: Server is created
 INFO 02:53:35: Server is started on 0.0.0.0:1234
+DEBUG 02:57:54: Client created: 127.0.0.1:7776
+INFO 02:57:54: 127.0.0.1:7776 >> #START
+INFO 02:57:54: 127.0.0.1:7776 << #OK
+DEBUG 02:57:54: Client added to vector
+DEBUG 03:12:54: Client created: 127.0.0.1:7777
+INFO 03:12:54: 127.0.0.1:7777 >> #START
+INFO 03:12:54: 127.0.0.1:7777 << #OK
+DEBUG 03:12:54: Client added to vector
+DEBUG 03:17:04: Client created: 127.0.0.1:7777
+INFO 03:17:04: 127.0.0.1:7777 >> #START
+INFO 03:17:04: 127.0.0.1:7777 << #OK
+DEBUG 03:17:04: Client added to vector

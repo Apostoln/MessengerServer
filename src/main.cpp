@@ -7,7 +7,6 @@
 
 INITIALIZE_EASYLOGGINGPP //crutch for logger
 
-constexpr static unsigned short PORT = 1234;
 
 int main(int argc, const char* argv[]) {
     ArgumentParser parser;
