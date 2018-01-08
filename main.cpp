@@ -38,13 +38,8 @@ int main(int argc, const char* argv[]) {
         pathToAccounts = DEFAULT_PATH_TO_ACCOUNTS;
     }
 
-    logLevel = el::Level::Debug;
-    isConsoleOut = true;
-    loggingFile = "/home/portaone/Workspace/proj/CLion/Messenger/MessengerServer/log/messenger.log";
-
     configureLogger(isConsoleOut, loggingFile, logLevel);
 
-    pathToAccounts = "/home/portaone/Workspace/proj/CLion/Messenger/MessengerServer/etc/accounts.txt";
     Registrar* registrar = new Registrar(pathToAccounts);
 
     MessengerServer messengerServer(registrar, PORT);

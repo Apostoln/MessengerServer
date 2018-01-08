@@ -72,3 +72,35 @@ DEBUG 02:43:52: testlog testpass
 DEBUG 02:43:52: testlog2 testpass2
 DEBUG 02:43:52: Server is created
 INFO 02:43:52: Server is started on 0.0.0.0:1234
+DEBUG 02:47:23: Logger started
+DEBUG 02:47:23: Log is wrote to /home/portaone/Workspace/proj/CLion/Messenger/MessengerServer/log/messenger.log
+DEBUG 02:47:23: Log level is 4
+DEBUG 02:47:23: Echo to stdout is specified
+DEBUG 02:47:23: Registrar created
+DEBUG 02:48:56: Logger started
+DEBUG 02:48:56: Log is wrote to /home/portaone/Workspace/proj/CLion/Messenger/MessengerServer/log/messenger.log
+DEBUG 02:48:56: Log level is 4
+DEBUG 02:48:56: Echo to stdout is specified
+DEBUG 02:48:56: Registrar created
+DEBUG 02:48:56: 2 accounts downloaded
+DEBUG 02:48:56: testlog testpass
+DEBUG 02:48:56: testlog2 testpass2
+DEBUG 02:48:56: Server is created
+INFO 02:48:56: Server is started on 0.0.0.0:1234
+DEBUG 02:49:08: Client created: 127.0.0.1:7776
+INFO 02:49:08: 127.0.0.1:7776 >> #START
+INFO 02:49:08: 127.0.0.1:7776 << #OK
+DEBUG 02:49:08: Client added to vector
+INFO 02:49:11: 127.0.0.1:7776 >> #LOGIN
+INFO 02:49:11: 127.0.0.1:7776 << #OK
+INFO 02:49:16: 127.0.0.1:7776 > foo bar
+INFO 02:49:16: 127.0.0.1:7776 << #ERROR
+INFO 02:49:19: 127.0.0.1:7776 >> #REG
+INFO 02:49:19: 127.0.0.1:7776 << #OK
+INFO 02:49:21: 127.0.0.1:7776 > foo bar
+INFO 02:49:21: 127.0.0.1:7776 << #OK
+INFO 02:49:23: 127.0.0.1:7776 >> #LOGIN
+INFO 02:49:23: 127.0.0.1:7776 << #OK
+INFO 02:49:26: 127.0.0.1:7776 > foo bar
+INFO 02:49:26: 127.0.0.1:7776 << #OK
+INFO 02:49:29: 127.0.0.1:7776 > hi all
