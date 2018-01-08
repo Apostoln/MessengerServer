@@ -5,6 +5,38 @@
 
 #include <easylogging++.h>
 
+el::Level getLogLevel(std::string logLevel) {
+    /*
+     *     Trace
+     *     Debug
+     *     Fatal
+     *     Error
+     *     Warning
+     *     Info
+     *     Verbose
+     */
+    std::transform(logLevel.begin(), logLevel.end(),logLevel.begin(), ::toupper);
+
+    if ("DEBUG" == logLevel) {
+        return el::Level::Debug;
+    }
+    else if ("FATAL" == logLevel) {
+        return el::Level::Fatal;
+    }
+    else if ("ERROR" == logLevel) {
+        return el::Level::Error;
+    }
+    else if ("WARNING" == logLevel) {
+        return el::Level::Warning;
+    }
+    else if ("INFO" == logLevel) {
+        return el::Level::Info;
+    }
+    else {
+        return el::Level::Unknown;
+    }
+}
+
 void setLogLevel(el::Level level, el::Configurations& conf) {
     //emulation of logging hierarchy because implementation in easylogging++ is too crutched
 
