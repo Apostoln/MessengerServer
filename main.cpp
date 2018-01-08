@@ -1,3 +1,4 @@
+#include <argparse.hpp>
 #include <easylogging++.h>
 
 #include "MessengerServer.hpp"

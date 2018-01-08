@@ -9,8 +9,10 @@ target_include_directories(asio INTERFACE lib/asio)
 add_library(easyloggingpp lib/easyloggingpp/src/easylogging++.cc)
 target_include_directories(easyloggingpp INTERFACE lib/easyloggingpp/src)
 
+add_library(argparse INTERFACE )
+target_include_directories(argparse INTERFACE lib/argparse )
 
 set(SOURCE_FILES main.cpp MessengerServer.cpp MessengerServer.hpp Client.cpp Client.hpp ProtocolMessage.hpp ProtocolMessage.cpp Account.cpp Account.hpp Registrar.cpp Registrar.hpp utils.hpp)
 add_executable(MessengerServer ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} asio easyloggingpp pthread)
+target_link_libraries(${PROJECT_NAME} asio easyloggingpp argparse pthread)
