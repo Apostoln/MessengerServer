@@ -104,3 +104,13 @@ INFO 02:49:23: 127.0.0.1:7776 << #OK
 INFO 02:49:26: 127.0.0.1:7776 > foo bar
 INFO 02:49:26: 127.0.0.1:7776 << #OK
 INFO 02:49:29: 127.0.0.1:7776 > hi all
+DEBUG 02:53:35: Logger started
+DEBUG 02:53:35: Log is wrote to /home/portaone/Workspace/proj/CLion/Messenger/MessengerServer/log/messenger.log
+DEBUG 02:53:35: Log level is 4
+DEBUG 02:53:35: Echo to stdout is specified
+DEBUG 02:53:35: Registrar created
+DEBUG 02:53:35: 2 accounts downloaded
+DEBUG 02:53:35: testlog testpass
+DEBUG 02:53:35: testlog2 testpass2
+DEBUG 02:53:35: Server is created
+INFO 02:53:35: Server is started on 0.0.0.0:1234
