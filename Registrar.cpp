@@ -5,12 +5,14 @@
 #include <algorithm>
 #include <memory>
 
+#include <easylogging++.h>
+
 #include "Registrar.hpp"
 
 Registrar::Registrar(const std::string& source_)
     : source(source_)
 {
-    std::cout << "Registrar created" << std::endl;
+    LOG(DEBUG) << "Registrar created";
     download();
 }
 
@@ -18,7 +20,7 @@ Registrar::Registrar(const std::string& source_)
 Registrar::Registrar(std::string&& source_)
     : source(std::move(source_))
 {
-    std::cout << "Registrar created" << std::endl;
+    LOG(DEBUG) << "Registrar created";
     download();
 }
 
@@ -44,12 +46,12 @@ void Registrar::download() {
     }
 
     if(accounts.empty()) {
-        std::cout << "Accounts list is empty" << std::endl;
+        LOG(WARNING) << "Accounts list is empty";
     }
     else {
-        std::cout << accounts.size() << " accounts downloaded" << std::endl;
+        LOG(DEBUG) << accounts.size() << " accounts downloaded";
         for (auto account: accounts) {
-            std::cout << account.login << " " << account.password << std::endl;
+            LOG(DEBUG) << account.login << " " << account.password;
         }
     }
 }
@@ -60,7 +62,7 @@ void Registrar::upload() {
     if(!fout.is_open()) {
         exit(2);
     }
-    std::cout << accounts.size() << " accounts uploaded:";
+    LOG(DEBUG) << accounts.size() << " accounts uploaded:";
     for(auto account: accounts) {
         auto accountString = account.login + " " + account.password;
         fout << accountString << std::endl;

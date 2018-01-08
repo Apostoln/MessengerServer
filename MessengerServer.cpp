@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <sstream>
 
+#include "easylogging++.h"
+
 #include "MessengerServer.hpp"
 #include "ProtocolMessage.hpp"
 
@@ -14,13 +16,15 @@ MessengerServer::MessengerServer(size_t port)
       port(port),
       registrar("/home/portaone/Workspace/proj/CLion/Messenger/MessengerServer/etc/accounts.txt")
 {
-    std::cout << "Server is created" << std::endl;
+    LOG(DEBUG) << "Server is created";
 
 }
 
 void MessengerServer::run() {
     std::cout << "Server is started on " << serverEndPoint.address().to_string()
               << ":" << serverEndPoint.port() << std::endl;
+    LOG(INFO) << "Server is started on " << serverEndPoint.address().to_string()
+              << ":" << serverEndPoint.port();
 
     acceptorThread = std::thread(&MessengerServer::acceptClients, this);
     handlingThread = std::thread(&MessengerServer::handleClients, this);
@@ -41,10 +45,10 @@ void MessengerServer::acceptClients() {
                     client.write(ProtocolMessage::OK);
 
                     std::lock_guard<std::mutex> clientsLock(clientsMutex);
-                    std::cout << "Client added to vector" << std::endl;
+                    LOG(DEBUG) << "Client added to vector";
                     clients.push_back(client);
                 } else {
-                    std::cerr << "Request is not #OK" << std::endl;
+                    LOG(WARNING) << "Request is not #OK";
                     socket.shutdown(ip::tcp::socket::shutdown_send);
                 }
                 break;
@@ -83,8 +87,8 @@ void MessengerServer::handleClients() {
                             outClient.write(wrapMessage(client, message));
                         }
                         catch (std::system_error &e) {
-                            std::cerr << "Error: " << e.what() << std::endl
-                                      << "Code: " << e.code() << std::endl;
+                            LOG(WARNING) << "Error: " << e.what() << std::endl
+                                      << "Code: " << e.code();
                             if (error::not_connected == e.code()) {
                                 outClient.close();
                                 //delete connection and set pointer to null for furthering removing from vector
