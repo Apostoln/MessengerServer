@@ -28,12 +28,12 @@ class MessengerServer {
         std::thread handlingThread;
         std::mutex clientsMutex;
 
-        Registrar registrar;
+        Registrar* registrar;
 
 
 
     public:
-        MessengerServer(size_t port);
+        MessengerServer(Registrar* registrar, size_t port);
 
         void run();
 

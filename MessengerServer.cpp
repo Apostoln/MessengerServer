@@ -10,11 +10,11 @@
 #include "ProtocolMessage.hpp"
 
 
-MessengerServer::MessengerServer(size_t port)
+MessengerServer::MessengerServer(Registrar* registrar, size_t port)
     : serverEndPoint(ip::tcp::v4(), port),
       acceptor(ioService, serverEndPoint),
       port(port),
-      registrar("/home/portaone/Workspace/proj/CLion/Messenger/MessengerServer/etc/accounts.txt")
+      registrar(registrar)
 {
     LOG(DEBUG) << "Server is created";
 
@@ -130,7 +130,7 @@ void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
                     std::getline(stream, temp, ' ');
                     std::string password = temp;
 
-                    registrar.addAccount(Account{login, password});
+                    registrar->addAccount(Account{login, password});
                     break;
                 }
             }
@@ -152,7 +152,7 @@ void MessengerServer::handleProtocol(Client& client, ProtocolMessage msg) {
 
                     Account candidate{login, password};
 
-                    auto result = registrar.authAccount(candidate);
+                    auto result = registrar->authAccount(candidate);
 
                     if (result.first) { // if successfull
                         isAuth = true;
